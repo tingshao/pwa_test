@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<title>PWA workload test demo</title>
+<body>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/scope/sw-demo.js', { scope: '/scope/' }).then(function(reg) {
+    console.log(reg);
+    if(reg.installing) {
+      console.log('Service worker installing');
+    } else if(reg.waiting) {
+      console.log('Service worker installed');
+    } else if(reg.active) {
+      console.log('Service worker active');
+    }
+  }).catch(function(error) {
+    // registration failed
+    console.log('Registration failed with ' + error);
+  });
+}
+
+navigator.serviceWorker.onmessage = (msg) => {
+  console.log('received msg.data.result:', msg.data.result);
+  let resultNode = document.createElement('input');
+  resultNode.id = 'result';
+  resultNode.value = msg.data.result;
+  document.body.appendChild(resultNode);
+};
+
+</script>
+<image src='/scope/img.jpg'></image>
+<label>Test Result:</label>
+<!-- Result node will appear here as: <input id='result'> -->
+</body>
